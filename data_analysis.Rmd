@@ -227,7 +227,8 @@ urt_genus %>%
   add_mean_rel_abundances() %>%
   taxa() %>%
   arrange(desc(mean_rel_abundance)) %>%
-  select(genus, mean_rel_abundance)
+  select(genus, mean_rel_abundance) %>%
+  print(n = 20)
 ```
 
 ## Alpha diversity (asv level)
@@ -306,7 +307,7 @@ urt %>%
   xlab("PCoA component 1") +
   ylab("PCoA component 2") + 
   theme_bw()
-ggsave(paste0(dout, "/figure_S1_pcoa.png"), units = "cm", width = 20, height = 15)
+ggsave(paste0(dout, "/figure_S1_pcoa.tiff"), units = "cm", width = 20, height = 15)
 ```
 
 The PCoA plot is an approximation in two dimensions; a lot of information gets lost. Now we will visualize all pairwise Bray-Curtis distances. Calculating those distances happened "under the hood" when we used the `add_pcoa()` function. Therefore, we have to calculate them again, this time to store them in a table: 
@@ -390,7 +391,7 @@ ggarrange(
   nrow = 2,
   heights = c(1, 1)
 )
-ggsave(paste0(dout, "/figure_1.png"), units = "cm", width = 30, height = 30)
+ggsave(paste0(dout, "/figure_1.tiff"), units = "cm", width = 30, height = 30)
 ```
 
 # Results 2: comparison with healthy subjects
@@ -471,7 +472,7 @@ Figure with significance values:
       comparisons = list(c(1, 2), c(1, 3), c(2, 3))
     )
 )
-ggsave(paste0(dout, "/figure_2.png"), units = "cm", width = 25, height = 20)
+ggsave(paste0(dout, "/figure_2.tiff"), units = "cm", width = 25, height = 20)
 ```
 
 Figure with p-values: 
@@ -610,7 +611,7 @@ ggarrange(
   fig_conditions_abun %>% give_letter("B"),
   ncol = 1, nrow = 2
 )
-ggsave(paste0(dout, "/figure_3.png"), units = "cm", width = 35, height = 30)
+ggsave(paste0(dout, "/figure_3.tiff"), units = "cm", width = 35, height = 30)
 ```
 
 # Results 3: assocations with metadata
@@ -677,7 +678,7 @@ predictors_enriched %>%
   ) +
   coord_flip() +
   theme_bw() 
-ggsave(paste0(dout, "/figure_4.png"), units = "cm", width = 30, height = 10)
+ggsave(paste0(dout, "/figure_4.tiff"), units = "cm", width = 30, height = 10)
 ```
 
 In our previous paper on the URT microbiome of healthy volunteers, we found a significant association between the microbiome and smoking. Let's visualize this variable (smoking) on a bar chart of the nasopharynx samples: 
@@ -709,7 +710,7 @@ crs_genus_clusters %>%
   theme(
     axis.text.x = element_blank()
   )
-ggsave(paste0(dout, "/figure_S2_clusters.png"), units = "cm", width = 30, height = 20)
+ggsave(paste0(dout, "/figure_S2_clusters.tiff"), units = "cm", width = 30, height = 20)
 ```
 
 Now we can create a summary table, with the mean of all numerical predictors per "subject cluster". 
@@ -823,6 +824,6 @@ ggarrange(
   fig_predictors_cat %>% give_letter("B"), 
   ncol = 1, nrow = 2
 )
-ggsave(paste0(dout, "/figure_5.png"), units = "cm", width = 35, height = 30)
+ggsave(paste0(dout, "/figure_5.tiff"), units = "cm", width = 35, height = 30)
 ```
 
