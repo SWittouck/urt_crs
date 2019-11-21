@@ -1,0 +1,11 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+
+input
+results
+ena
+ena_*
+*.html
+data_preparation.*
