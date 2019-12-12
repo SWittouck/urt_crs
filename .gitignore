@@ -3,9 +3,8 @@
 .RData
 .Ruserdata
 
-input
-results
+doc
 ena
-ena_*
-*.html
-data_preparation.*
+results
+
+notes.md

@@ -66,8 +66,8 @@ Make results folders:
 
 ```{r}
 outdirs <- c(
-  "results", "results/locations", "results/conditions", "results/polyps", 
-  "results/metadata"
+  "../results", "../results/locations", "../results/conditions", 
+  "../results/polyps", "../results/metadata"
 )
 for (dir in outdirs) if (! dir.exists(dir)) dir.create(dir)
 ```
@@ -77,7 +77,7 @@ for (dir in outdirs) if (! dir.exists(dir)) dir.create(dir)
 We start by loading the data. All data is bundled in a "tidyamplicons" object: it contains the read counts of all taxa (ASVs) in all samples, the metadata of the samples (sampling location, patient characteristics, ...) and metadata of the taxa (taxonomic classification and interpretable taxon names). 
 
 ```{r}
-load("data/urt.rda")
+load("../data/urt.rda")
 ```
 
 Create a separate tidyamplicons object with abundances aggregated on the genus level: 
@@ -113,7 +113,7 @@ locs <- c("anterior nares", "nasopharynx", "maxillary sinus", "ethmoid sinus")
 Now that we prepared the dataset, we would like to explore the metadata of all CRS patients with at least one high-quality sample. The names of all metadata variables on the level of the participants (e.g. age), not samples (e.g. sampling location) is stored in a txt file called "variables.txt".
 
 ```{r}
-predictors <- read_csv("input/variables.txt")
+predictors <- read_csv("../data/variables.txt")
 crs_patients <- 
   urt$samples %>%
   filter(condition == "CRS") %>%
@@ -123,7 +123,7 @@ crs_patients <-
   ungroup() %>%
   mutate(present = TRUE) %>%
   spread(key = location, value = present, fill = FALSE)
-write_csv(crs_patients, "results/table_S1_metadata.csv")
+write_csv(crs_patients, "../results/table_S1_metadata.csv")
 ```
 
 ## Numerical variables (discrete and continuous)
@@ -141,7 +141,7 @@ av_table <-
     mean = mean(value, na.rm = T),
     sd = sd(value, na.rm = T)
   )
-write_csv(av_table, "results/metadata/predictors_summary_num.csv")
+write_csv(av_table, "../results/metadata/predictors_summary_num.csv")
 ```
 
 We can also explore the variables in a visualization: 
@@ -154,7 +154,7 @@ crs_patients %>%
   geom_bar() + 
   facet_wrap(~ variable, ncol = 1, scales = "free")
 ggsave(
-  "results/metadata/expl_discrete.png", 
+  "../results/metadata/expl_discrete.png", 
   units = "cm", width = 40, height = 20
 )
 crs_patients %>%
@@ -164,7 +164,7 @@ crs_patients %>%
   geom_density() + 
   facet_wrap(~ variable, ncol = 1, scales = "free")
 ggsave(
-  "results/metadata/expl_continuous.png", 
+  "../results/metadata/expl_continuous.png", 
   units = "cm", width = 40, height = 20
 )
 ```
@@ -179,7 +179,7 @@ freq_table <-
   select(!! predictors %>% filter(level == "cat") %>% pull(predictor)) %>%
   gather(value = "value", key = "variable", tidyselect::everything()) %>%
   count(variable, value)
-write_csv(freq_table, "results/metadata/predictors_summary_cat.csv")
+write_csv(freq_table, "../results/metadata/predictors_summary_cat.csv")
 ```
 
 Visualization: 
@@ -191,7 +191,7 @@ freq_table %>%
   coord_flip() + 
   facet_wrap(~ variable, scales = "free")
 ggsave(
-  "results/metadata/expl_categorical.png", 
+  "../results/metadata/expl_categorical.png", 
   units = "cm", width = 20, height = 15
 )
 ```
@@ -212,7 +212,7 @@ crs_patients %>%
   geom_jitter(width = 0.2, height = 0) + 
   facet_wrap(~ variable, ncol = 3, scales = "free")
 ggsave(
-  "results/metadata/droupout_numeric.png", 
+  "../results/metadata/droupout_numeric.png", 
   units = "cm", width = 40, height = 20
 )
 ```
@@ -231,7 +231,7 @@ crs_patients %>%
   facet_wrap(~ variable, ncol = 3, scales = "free") +
   scale_fill_brewer(palette = "Paired")
 ggsave(
-  "results/metadata/droupout_categorical.png", 
+  "../results/metadata/droupout_categorical.png", 
   units = "cm", width = 40, height = 20
 )
 ```
@@ -305,7 +305,7 @@ participants_ordered <-
       plot.margin = unit(c(0, 1, 0, 0), "cm")
     )
 )
-ggsave("results/locations/barplot.png", units = "cm", width = 40, height = 20)
+ggsave("../results/locations/barplot.png", units = "cm", width = 40, height = 20)
 ```
 
 The genus name FM873692_g is not really interpretable; some research at the [EzBioCloud](https://www.ezbiocloud.net/) website learns us that it is a genus of the family Neisseriaceae.
@@ -328,7 +328,7 @@ abs_overall <-
 left_join(abs_overall, abs_locations) %>%
   arrange(desc(mean_rel_abundance)) %>%
   slice(1:15) %>%
-  write_csv("results/table_S3_top_genera")
+  write_csv("../results/table_S3_top_genera")
 ```
 
 ## Alpha diversity (asv level)
@@ -396,7 +396,7 @@ fig_locations_div_raw <-
       size_brackets = 0.2, size_labels = 2
     )
 )
-ggsave("results/locations/diversity.png", units = "cm", width = 17.4, height = 20)
+ggsave("../results/locations/diversity.png", units = "cm", width = 17.4, height = 20)
 ```
 
 Remark: we have used the rarefied data for this; otherwise a sample with many reads would tend to seem more diverse. It might be good to show that samples with large read depth do not have higher inverse simpson values: 
@@ -412,7 +412,7 @@ urt %>%
   scale_y_log10() +
   theme_bw()
 ggsave(
-  "results/locations/inv_simpson_read_depth.png", 
+  "../results/locations/inv_simpson_read_depth.png", 
   units = "cm", width = 17.4, height = 17.4
 )
 ```
@@ -435,8 +435,8 @@ urt %>%
   xlab(paste0("PCoA component 1 (", round(pcoa_vars[1] * 100), "%)")) +
   ylab(paste0("PCoA component 2 (", round(pcoa_vars[2] * 100), "%)")) + 
   theme_bw()
-ggsave("results/locations/pcoa.png", units = "cm", width = 17.4, height = 12)
-ggsave("results/figure_S1_locations_pcoa.tiff", units = "cm", width = 17.4, height = 12)
+ggsave("../results/locations/pcoa.png", units = "cm", width = 17.4, height = 12)
+ggsave("../results/figure_S1_locations_pcoa.tiff", units = "cm", width = 17.4, height = 12)
 ```
 
 The PCoA plot is an approximation in two dimensions; a lot of information gets lost. Now we will visualize all pairwise Bray-Curtis distances. Calculating those distances happened "under the hood" when we used the `add_pcoa()` function. Therefore, we have to calculate them again, this time to store them in a table: 
@@ -499,7 +499,7 @@ locations_labels <- c(
       legend.text = element_text(margin = margin(b = 5))
     )
 )
-ggsave("results/locations/betas.png", units = "cm", width = 20, height = 16)
+ggsave("../results/locations/betas.png", units = "cm", width = 20, height = 16)
 ```
 
 Finally, we perform an adonis test with the variables location (niche) and participant als predictors. This will tell us if the microbiome differs significantly between the locations (within participants) and/or between the participants (within locations). 
@@ -531,7 +531,7 @@ ggarrange(
   nrow = 2,
   heights = c(1, 1)
 )
-ggsave("results/figure_1_locations.tiff", units = "cm", width = 17.5, height = 17.5, dpi = 300)
+ggsave("../results/figure_1_locations.tiff", units = "cm", width = 17.5, height = 17.5, dpi = 300)
 ```
 
 # Results 2: comparison between conditions
@@ -624,8 +624,8 @@ fig_conditions_div_raw %>%
     group_levels = c("healthy", "CRSsNP", "CRSwNP"), 
     facet_vars = c("metric", "location")
   )
-ggsave("results/conditions/alpha_diversity.tiff", units = "cm", width = 17.4, height = 16)
-ggsave("results/figure_2_conditions_diversity.tiff", units = "cm", width = 17.4, height = 16)
+ggsave("../results/conditions/alpha_diversity.tiff", units = "cm", width = 17.4, height = 16)
+ggsave("../results/figure_2_conditions_diversity.tiff", units = "cm", width = 17.4, height = 16)
 ```
 
 ## Differential presence of CON vs CRS (asv level)
@@ -682,7 +682,7 @@ Now we can visualize the "occurrences" and fischer exact test significances in a
     theme_bw()
 )
 ggsave(
-  "results/conditions/differential_presence.png", 
+  "../results/conditions/differential_presence.png", 
   units = "cm", width = 35, height = 15
 )
 ```
@@ -740,7 +740,7 @@ Visualize differential abundances in a scatterplot:
     theme_bw() 
 )
 ggsave(
-  "results/conditions/differential_abundance.png", 
+  "../results/conditions/differential_abundance.png", 
   units = "cm", width = 35, height = 15
 )
 ```
@@ -781,7 +781,7 @@ bind_rows(
   select(taxon_name, header, preference) %>%
   spread(key = header, value = preference) %>%
   left_join(urt$taxa %>% select(taxon_name, species)) %>%
-  write_csv("results/table_S2_differential_taxa.csv")
+  write_csv("../results/table_S2_differential_taxa.csv")
 ```
 
 ## Differential presence of CRSsNP vs CRSwNP
@@ -838,7 +838,7 @@ pres_table <-
     theme_bw() 
 )
 ggsave(
-  "results/polyps/differential_presence.png", 
+  "../results/polyps/differential_presence.png", 
   units = "cm", width = 35, height = 15
 )
 ```
@@ -899,7 +899,7 @@ ab_table <-
     theme_bw() 
 )
 ggsave(
-  "results/polyps/differential_abundance.png", 
+  "../results/polyps/differential_abundance.png", 
   units = "cm", width = 35, height = 15
 )
 ```
@@ -922,7 +922,7 @@ betas %>%
   xlab("condition") +
   ylab("within-subject Bray-Curtis dissimilarity")
 ggsave(
-  "results/conditions/continuity.png", 
+  "../results/conditions/continuity.png", 
   units = "cm", width = 12, height = 10
 )
 ```
@@ -961,7 +961,7 @@ betas_nose_con %>%
   xlab("condition") +
   theme_bw()
 ggsave(
-  "results/conditions/beta_diversity.png", units = "cm", width = 20, 
+  "../results/conditions/beta_diversity.png", units = "cm", width = 20, 
   height = 16
 )
 ```
@@ -977,7 +977,7 @@ ggarrange(
   ncol = 1, nrow = 2
 )
 ggsave(
-  "results/figure_3_conditions_diffpresabun.tiff", 
+  "../results/figure_3_conditions_diffpresabun.tiff", 
   units = "cm", width = 30, height = 25
 )
 ```
@@ -991,7 +991,7 @@ ggarrange(
   ncol = 1, nrow = 2
 )
 ggsave(
-  "results/figure_S2_polyps_diffpresabun.tiff", 
+  "../results/figure_S2_polyps_diffpresabun.tiff", 
   units = "cm", width = 30, height = 25
 )
 ```
@@ -1036,7 +1036,7 @@ predictors_enriched <-
   select(- adonis) %>%
   mutate(sign = p < 0.05)
 predictors_enriched %>%
-  write_csv("results/metadata/predictors_pvalues.csv")
+  write_csv("../results/metadata/predictors_pvalues.csv")
 ```
 
 Visualize results:
@@ -1060,8 +1060,8 @@ predictors_enriched %>%
   ) +
   coord_flip() +
   theme_bw() 
-ggsave("results/metadata/predictors.png", units = "cm", width = 30, height = 10)
-ggsave("results/figure_4_predictors.tiff", units = "cm", width = 30, height = 10)
+ggsave("../results/metadata/predictors.png", units = "cm", width = 30, height = 10)
+ggsave("../results/figure_4_predictors.tiff", units = "cm", width = 30, height = 10)
 ```
 
 In our previous paper on the URT microbiome of healthy volunteers, we found a significant association between the microbiome and smoking. Let's visualize this variable (smoking) on a bar chart of the nasopharynx samples: 
@@ -1093,8 +1093,8 @@ crs_genus_clusters %>%
   theme(
     axis.text.x = element_blank()
   )
-ggsave("results/metadata/clusters.png", units = "cm", width = 30, height = 20)
-ggsave("results/figure_S3_clusters.tiff", units = "cm", width = 30, height = 20)
+ggsave("../results/metadata/clusters.png", units = "cm", width = 30, height = 20)
+ggsave("../results/figure_S3_clusters.tiff", units = "cm", width = 30, height = 20)
 ```
 
 We also plot a dendrogram of the hierarchical clustering: 
@@ -1107,7 +1107,7 @@ clust <-
   hclust(method = "average") %>% 
   as.phylo() %>%
   keep.tip(tip = crs_genus_clusters$samples$sample_id)
-tiff(filename = "results/figure_S3_clusters_dendro.tiff")
+tiff(filename = "../results/figure_S3_clusters_dendro.tiff")
 plot(clust, show.tip.label = F, direction = "downwards")
 dev.off()
 ```
@@ -1143,7 +1143,7 @@ Exploratory visualization of the numerical predictors:
     facet_wrap(~ predictor, scales = "free_y", ncol = 2) +
     theme_bw()
 )
-ggsave("results/metadata/predictors_num.png", units = "cm", width = 20, height = 15)
+ggsave("../results/metadata/predictors_num.png", units = "cm", width = 20, height = 15)
 ```
 
 Exploratory visulizations of the categorical predictors: 
@@ -1168,14 +1168,14 @@ predictors_tidy %>%
   facet_wrap(~ predictor, scales = "free", ncol = 2) +
   scale_fill_brewer(palette = "Paired") + 
   theme_bw()
-ggsave("results/metadata/predictors_cat_1.png", units = "cm", width = 20, height = 15)
+ggsave("../results/metadata/predictors_cat_1.png", units = "cm", width = 20, height = 15)
 
 predictors_tidy %>%
   ggplot(aes(x = value, y = cluster)) +
   geom_count(aes(col = ..n..)) +
   facet_wrap(~ predictor) + 
   theme_bw()
-ggsave("results/metadata/predictors_cat_2.png", units = "cm", width = 20, height = 15)
+ggsave("../results/metadata/predictors_cat_2.png", units = "cm", width = 20, height = 15)
 
 (
   fig_predictors_cat <-
@@ -1194,7 +1194,7 @@ ggsave("results/metadata/predictors_cat_2.png", units = "cm", width = 20, height
       panel.grid = element_blank()
     )
 )
-ggsave("results/metadata/predictors_cat_3.png", units = "cm", width = 20, height = 15)
+ggsave("../results/metadata/predictors_cat_3.png", units = "cm", width = 20, height = 15)
 
 predictors_tidy %>%
   mutate(value = if_else(value == 1, "yes", "no")) %>%
@@ -1210,7 +1210,7 @@ predictors_tidy %>%
     axis.text.x = element_blank(),
     panel.grid = element_blank()
   )
-ggsave("results/metadata/predictors_cat_4.png", units = "cm", width = 20, height = 15)
+ggsave("../results/metadata/predictors_cat_4.png", units = "cm", width = 20, height = 15)
 ```
 
 ## Panel
@@ -1223,6 +1223,6 @@ ggarrange(
   fig_predictors_cat %>% give_letter("B"), 
   ncol = 1, nrow = 2
 )
-ggsave("results/figure_5_predictors_clusters.tiff", units = "cm", width = 35, height = 30)
+ggsave("../results/figure_5_predictors_clusters.tiff", units = "cm", width = 35, height = 30)
 ```
 
