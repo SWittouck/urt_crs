@@ -67,7 +67,7 @@ Make results folders:
 ```{r}
 outdirs <- c(
   "../results", "../results/locations", "../results/conditions", 
-  "../results/polyps", "../results/metadata"
+  "../results/polyps", "../results/metadata", "../results/paper_crs"
 )
 for (dir in outdirs) if (! dir.exists(dir)) dir.create(dir)
 ```
@@ -123,7 +123,7 @@ crs_patients <-
   ungroup() %>%
   mutate(present = TRUE) %>%
   spread(key = location, value = present, fill = FALSE)
-write_csv(crs_patients, "../results/table_S1_metadata.csv")
+write_csv(crs_patients, "../results/paper_crs/table_S1_metadata.csv")
 ```
 
 ## Numerical variables (discrete and continuous)
@@ -328,7 +328,7 @@ abs_overall <-
 left_join(abs_overall, abs_locations) %>%
   arrange(desc(mean_rel_abundance)) %>%
   slice(1:15) %>%
-  write_csv("../results/table_S3_top_genera")
+  write_csv("../results/paper_crs/table_S3_top_genera")
 ```
 
 ## Alpha diversity (asv level)
@@ -435,8 +435,14 @@ urt %>%
   xlab(paste0("PCoA component 1 (", round(pcoa_vars[1] * 100), "%)")) +
   ylab(paste0("PCoA component 2 (", round(pcoa_vars[2] * 100), "%)")) + 
   theme_bw()
-ggsave("../results/locations/pcoa.png", units = "cm", width = 17.4, height = 12)
-ggsave("../results/figure_S1_locations_pcoa.tiff", units = "cm", width = 17.4, height = 12)
+ggsave(
+  "../results/locations/pcoa.png", 
+  units = "cm", width = 17.4, height = 12
+)
+ggsave(
+  "../results/paper_crs/figure_S1_locations_pcoa.tiff", 
+  units = "cm", width = 17.4, height = 12
+)
 ```
 
 The PCoA plot is an approximation in two dimensions; a lot of information gets lost. Now we will visualize all pairwise Bray-Curtis distances. Calculating those distances happened "under the hood" when we used the `add_pcoa()` function. Therefore, we have to calculate them again, this time to store them in a table: 
@@ -531,7 +537,10 @@ ggarrange(
   nrow = 2,
   heights = c(1, 1)
 )
-ggsave("../results/figure_1_locations.tiff", units = "cm", width = 17.5, height = 17.5, dpi = 300)
+ggsave(
+  "../results/paper_crs/figure_1_locations.tiff", 
+  units = "cm", width = 17.5, height = 17.5, dpi = 300
+)
 ```
 
 # Results 2: comparison between conditions
@@ -624,8 +633,14 @@ fig_conditions_div_raw %>%
     group_levels = c("healthy", "CRSsNP", "CRSwNP"), 
     facet_vars = c("metric", "location")
   )
-ggsave("../results/conditions/alpha_diversity.tiff", units = "cm", width = 17.4, height = 16)
-ggsave("../results/figure_2_conditions_diversity.tiff", units = "cm", width = 17.4, height = 16)
+ggsave(
+  "../results/conditions/alpha_diversity.tiff", 
+  units = "cm", width = 17.4, height = 16
+)
+ggsave(
+  "../results/paper_crs/figure_2_conditions_diversity.tiff", 
+  units = "cm", width = 17.4, height = 16
+)
 ```
 
 ## Differential presence of CON vs CRS (asv level)
@@ -781,7 +796,7 @@ bind_rows(
   select(taxon_name, header, preference) %>%
   spread(key = header, value = preference) %>%
   left_join(urt$taxa %>% select(taxon_name, species)) %>%
-  write_csv("../results/table_S2_differential_taxa.csv")
+  write_csv("../results/paper_crs/table_S2_differential_taxa.csv")
 ```
 
 ## Differential presence of CRSsNP vs CRSwNP
@@ -977,7 +992,7 @@ ggarrange(
   ncol = 1, nrow = 2
 )
 ggsave(
-  "../results/figure_3_conditions_diffpresabun.tiff", 
+  "../results/paper_crs/figure_3_conditions_diffpresabun.tiff", 
   units = "cm", width = 30, height = 25
 )
 ```
@@ -991,7 +1006,7 @@ ggarrange(
   ncol = 1, nrow = 2
 )
 ggsave(
-  "../results/figure_S2_polyps_diffpresabun.tiff", 
+  "../results/paper_crs/figure_S2_polyps_diffpresabun.tiff", 
   units = "cm", width = 30, height = 25
 )
 ```
@@ -1060,8 +1075,14 @@ predictors_enriched %>%
   ) +
   coord_flip() +
   theme_bw() 
-ggsave("../results/metadata/predictors.png", units = "cm", width = 30, height = 10)
-ggsave("../results/figure_4_predictors.tiff", units = "cm", width = 30, height = 10)
+ggsave(
+  "../results/metadata/predictors.png", 
+  units = "cm", width = 30, height = 10
+)
+ggsave(
+  "../results/paper_crs/figure_4_predictors.tiff", 
+  units = "cm", width = 30, height = 10
+)
 ```
 
 In our previous paper on the URT microbiome of healthy volunteers, we found a significant association between the microbiome and smoking. Let's visualize this variable (smoking) on a bar chart of the nasopharynx samples: 
@@ -1093,8 +1114,14 @@ crs_genus_clusters %>%
   theme(
     axis.text.x = element_blank()
   )
-ggsave("../results/metadata/clusters.png", units = "cm", width = 30, height = 20)
-ggsave("../results/figure_S3_clusters.tiff", units = "cm", width = 30, height = 20)
+ggsave(
+  "../results/metadata/clusters.png", 
+  units = "cm", width = 30, height = 20
+)
+ggsave(
+  "../results/paper_crs/figure_S3_clusters.tiff", 
+  units = "cm", width = 30, height = 20
+)
 ```
 
 We also plot a dendrogram of the hierarchical clustering: 
@@ -1107,7 +1134,7 @@ clust <-
   hclust(method = "average") %>% 
   as.phylo() %>%
   keep.tip(tip = crs_genus_clusters$samples$sample_id)
-tiff(filename = "../results/figure_S3_clusters_dendro.tiff")
+tiff(filename = "../results/paper_crs/figure_S3_clusters_dendro.tiff")
 plot(clust, show.tip.label = F, direction = "downwards")
 dev.off()
 ```
@@ -1210,7 +1237,10 @@ predictors_tidy %>%
     axis.text.x = element_blank(),
     panel.grid = element_blank()
   )
-ggsave("../results/metadata/predictors_cat_4.png", units = "cm", width = 20, height = 15)
+ggsave(
+  "../results/metadata/predictors_cat_4.png", 
+  units = "cm", width = 20, height = 15
+)
 ```
 
 ## Panel
@@ -1223,6 +1253,9 @@ ggarrange(
   fig_predictors_cat %>% give_letter("B"), 
   ncol = 1, nrow = 2
 )
-ggsave("../results/figure_5_predictors_clusters.tiff", units = "cm", width = 35, height = 30)
+ggsave(
+  "../results/paper_crs/figure_5_predictors_clusters.tiff",
+  units = "cm", width = 35, height = 30
+)
 ```
 
