@@ -24,9 +24,9 @@ This analysis has been published in mSphere:
 
 These analyses can be found in the folder src/family-level. 
 
-We performed two types of analysis with the read counts aggregated on the family level: 
+We performed two types of analyses with the read counts aggregated on the family level: 
 
-* A compositional data analysis (CODA) to test for differential abundance between CRS and healthy control samples. 
-* A differential abundance test on the relative abundances, specifically for the Lactoabacillus Genus Complex. 
+* A compositional data analysis (CODA) to test for differential abundance of families between CRS and healthy control samples. 
+* A differential abundance test for the Lactobacillus Genus Complex (our favourite bacteria) on the relative abundances. 
 
 These analyses are reported in a manuscript that is currently being peer reviewed. 
