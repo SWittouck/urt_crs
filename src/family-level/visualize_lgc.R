@@ -22,7 +22,9 @@ load("results/parsed/urt_fam.rda")
 
 samples <- 
   urt_fam %>%
-  mutate_samples(location = recode(location, "N" = "nose", "NF" = "npx")) %>%
+  mutate_samples(
+    location = recode(location, "N" = "Anterior nares", "NF" = "Nasopharynx")
+  ) %>%
   add_lib_size() %>%
   filter_taxa(family == "LGC") %>%
   {left_join(.$samples, .$abundances)} %>%
@@ -66,7 +68,8 @@ ggsave(
   width = 8, height = 8, units = "cm"
 )
 
-(p4 <- samples %>%
+(p4 <- samples %>% 
+  mutate_at("present", factor, levels = c("no", "yes")) %>%
   ggplot(aes(x = condition, y = rel_abundance)) +
   geom_boxplot(col = "grey", outlier.alpha = 0) +
   geom_sina(aes(col = present), size = 0.3) + 
@@ -77,7 +80,7 @@ ggsave(
   facet_wrap(~ location, scales = "free_y") +
   ylab("relative abundance") +
   scale_y_log10() +
-  scale_color_brewer(palette = "Paired") +
+  scale_color_manual(values = c("yes" = "#1f78b4", "no" = "#a6cee3")) +
   theme_classic()) +
   theme(
     legend.position = "bottom",
@@ -99,13 +102,25 @@ ggsave(
 
 # CON vs CRS - presence/absence 
 
-# samples %>%
-#   ggplot(aes(x = condition, fill = present)) +
-#   geom_bar() +
-#   stat_pvalue_manual(
-#     data = tibble(group1 = "CON", group2 = "CRS", p = 0.04, y.position = 100)
-#   ) +
-#   scale_fill_brewer(palette = "Paired") 
+samples %>% 
+  mutate_at("present", factor, levels = c("no", "yes")) %>%
+  count(condition, location, present, name = "count") %>%
+  group_by(condition, location) %>%
+  mutate(percentage = count / sum(count)) %>%
+  ungroup() %>%
+  ggplot(aes(x = condition, y = percentage, fill = present)) +
+  geom_col() + 
+  facet_wrap(~ location, scales = "free_y") +
+  scale_fill_manual(values = c("yes" = "#1f78b4", "no" = "#a6cee3")) +
+  theme_classic() +
+  theme(
+    legend.position = "bottom",
+    text = element_text(size = 8)
+  )
+ggsave(
+  paste0(dout_paper, "/con_vs_crs_lgc_presabs.png"), 
+  width = 8, height = 8, units = "cm"
+)
 
 # CON vs CRSwNP vs CRSsNP
 

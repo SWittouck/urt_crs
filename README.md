@@ -1,6 +1,6 @@
 # The upper respiratory tract microbiome of patients with chronic rhinosinusitis
 
-The goal of this project is to compare the microbiome of the human upper respiratory tract between patients with chronic rhinosinusitis and healthy controls. This will allow us to assess whether the microbiome plays a role in this disease and if yes, what bacteria are potentially associated with health or disease.
+The goal of this project is to compare the microbiome of the human upper respiratory tract between patients with chronic rhinosinusitis (CRS) and healthy controls. This will allow us to assess whether the microbiome plays a role in this disease and if yes, what bacteria are potentially associated with health or disease.
 
 ## The data
 
@@ -12,8 +12,8 @@ The data consists of 16S rRNA amplicon sequenced samples (V4 region), sequenced 
 
 The RMarkdown document src/data_analysis.Rmd contains the main overall analysis of the data:
 
-1) A comparison between sampling locations (nose, nasopharynx, maxillary sinus and ethmoid sinus)
-2) A comparison between samples from CRS patients and healthy controls, for the nose and nasopharynx samples
+1) A comparison between sampling sites (nose, nasopharynx, maxillary sinus and ethmoid sinus) for the CRS samples
+2) A comparison between samples from CRS patients and healthy controls, for the nose and nasopharynx sampling sites
 3) Association tests between the microbiome data of the CRS patients and some patient/disease related covariates
 
 This analysis has been published in mSphere:
@@ -29,4 +29,4 @@ We performed two types of analyses with the read counts aggregated on the family
 * A compositional data analysis (CODA) to test for differential abundance of families between CRS and healthy control samples. 
 * A differential abundance test for the Lactobacillus Genus Complex (our favourite bacteria) on the relative abundances. 
 
-These analyses are reported in a manuscript that is currently being peer reviewed. 
+These analyses are reported in a manuscript that is currently under peer review. 

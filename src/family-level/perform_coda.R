@@ -51,7 +51,7 @@ ggsave(
 )
 file.copy(
   paste0(dout, "/con_crs_npx.png"), 
-  paste0(dout_paper, "/con_crs_codifab_npx.png")
+  paste0(dout_paper, "/con_vs_crs_codifab_npx.png")
 )
 
 urt_fam_polyps <-
