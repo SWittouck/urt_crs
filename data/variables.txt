@@ -1,0 +1,16 @@
+predictor, type, level
+age, characteristic, disc
+sex, characteristic, cat
+asthma, phenotype, cat
+allergies, phenotype, cat
+polyps, phenotype, cat
+infectious, phenotype, cat
+SNOT22, characteristic, disc
+VAS, characteristic, disc
+smoking, characteristic, cat
+steroids, characteristic, cat
+antibiotics, characteristic, cat
+FESS, characteristic, cat
+periostin, endotype, cont
+IL5, endotype, cont
+IFNgamma, endotype, cont

@@ -3,8 +3,16 @@
 .RData
 .Ruserdata
 
+data/metadata_patients_all_24092018.xlsx
 doc
 ena
-results
-
 notes.md
+older_projects
+results
+src/create_neisseria_tables.R
+src/data_analysis_spare.Rmd
+src/data_preparation.Rmd
+src/family-level/ancom/ANCOM_2.0_Readme.doc
+src/family-level/ancom/ys_genera.txt
+src/figure_for_sarah.R
+src/lactobacillaceae.R
